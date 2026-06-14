@@ -52,6 +52,9 @@
      because it doesn't create a new scroll container that breaks sticky. */
   html, body { width: 100%; max-width: 100%; overflow-x: clip; }
   @supports not (overflow-x: clip) { html, body { overflow-x: hidden; } }
+  /* Stop mobile browsers auto-inflating text (which blows up the small image
+     watermarks disproportionately in the large hero/filmstrip containers). */
+  html { -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; }
   /* Anchor links land below the fixed nav (≈70px tall on mobile) */
   section[id], div[id="clients"], div[id="contact"] { scroll-margin-top: 70px; }
   body {
@@ -904,8 +907,16 @@
 
     h2 { font-size: 42px; margin-bottom: 40px; }
 
-    /* Portfolio tabs — scroll horizontally */
-    .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; flex-wrap: nowrap; }
+    /* Portfolio tabs — equal-width columns so spacing is even */
+    .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+    .tab {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 14px 6px;
+      text-align: center;
+      letter-spacing: 2px;
+      white-space: normal;
+    }
 
     .clients-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -915,6 +926,15 @@
     .lightbox-nav  { font-size: 64px; padding: 0 20px; }
     .lightbox-close { top: 16px; right: 20px; font-size: 44px; }
     .lightbox-img  { max-width: 95vw; max-height: 80vh; }
+
+    /* Watermark — keep it small & proportionate on phones */
+    .img-wm,
+    .port-item::before,
+    .film-strip-item::before,
+    .hero-img-main::before,
+    .hero-img-sub::before { font-size: 9px; bottom: 6px; right: 7px; letter-spacing: 0.3px; }
+    .img-wm--sm,
+    #panel-concu-hampers .port-item::before { font-size: 8px; }
   }
 
   /* ── SMALL PHONES (≤480px) ── */
@@ -933,6 +953,15 @@
     footer     { padding: 16px; }
     h2         { font-size: 36px; margin-bottom: 32px; }
     .clients-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Watermark — smallest on compact phones */
+    .img-wm,
+    .port-item::before,
+    .film-strip-item::before,
+    .hero-img-main::before,
+    .hero-img-sub::before { font-size: 8px; bottom: 5px; right: 6px; }
+    .img-wm--sm,
+    #panel-concu-hampers .port-item::before { font-size: 7px; }
   }
 
   .brand-logos {
@@ -2998,7 +3027,7 @@
     <div class="about-head">
       <h2>Storytellers For <em>Food</em> &amp; <em>Drink</em>.</h2>
       <p class="about-lede">A dish carries the weight of its ingredients, the hands that made it, the hours behind it &mdash; and the culture it came from. Our job is to make sure none of that gets lost in the frame.</p>
-      <p class="about-body">Ember &amp; Frames is a visual content studio and social media partner built for the food and beverage world. From restaurant interiors and bar programmes to hotel dining and editorial spreads, we create photography and film that feels as alive on screen as it does in the room &mdash; warm, considered, and impossible to scroll past.</p>
+      <p class="about-body">Ember &amp; Frames is a visual content studio and social media partner built for the food and beverage world. From restaurant interiors and bar programmes to hotel dining and editorial spreads, we create photographs and films that feel as alive on screen as it does in the room &mdash; warm, considered, and impossible to scroll past.</p>
     </div>
     <section class="process" id="process">
       <div class="process-header">
