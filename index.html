@@ -564,6 +564,7 @@
     font-size: 11px;
     letter-spacing: 0.4px;
     font-weight: 500;
+    text-transform: none;
     color: rgba(255,255,255,0.80);
     z-index: 3;
     pointer-events: none;
@@ -581,6 +582,7 @@
     font-size: 11px;
     letter-spacing: 0.4px;
     font-weight: 500;
+    text-transform: none;
     color: rgba(255,255,255,0.80);
     z-index: 4;
     pointer-events: none;
@@ -1219,7 +1221,13 @@
     .concu-subtab-btn { padding: 8px 12px !important; font-size: 10px !important; }
     .ru-subtab-btn { padding: 8px 12px !important; font-size: 10px !important; }
 
-    .brand-logo-item { min-width: 100px; font-size: 22px; padding: 20px 8px; }
+    /* Stretch wrapped rows so each item is the same height — keeps the
+       vertical divider lines (border-right) matched in length on mobile. */
+    .brand-logos-grid { align-items: stretch; }
+    .brand-logo-item {
+      min-width: 100px; font-size: 22px; padding: 20px 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
   }
 
   .process-step-icon {
@@ -1450,7 +1458,7 @@
     0%, 100% { box-shadow: 0 6px 20px rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.15), 0 0 0 0 rgba(92,107,58,0.55); }
     50%      { box-shadow: 0 6px 20px rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.15), 0 0 0 14px rgba(92,107,58,0); }
   }
-  @media (max-width: 600px) { .wa-fab { width: 52px; height: 52px; bottom: 16px; right: 16px; } .wa-fab.lift-up { bottom: 130px; } .wa-fab svg { width: 28px; height: 28px; } .wa-fab-label { display: none; } }
+  @media (max-width: 600px) { .wa-fab { width: 52px; height: 52px; bottom: 16px; right: 16px; } .wa-fab.lift-up { bottom: 96px; } .wa-fab svg { width: 28px; height: 28px; } .wa-fab-label { display: none; } }
   @media (prefers-reduced-motion: reduce) { .wa-fab { animation: none; } }
 
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
@@ -3128,7 +3136,7 @@
         <button type="button" class="pill" aria-pressed="false" data-value="Reels &amp; Banner Advertisements">Reels &amp; Banner Advertisements</button>
         <button type="button" class="pill" aria-pressed="false" data-value="Launch Shoot">Launch Shoot</button>
         <button type="button" class="pill" aria-pressed="false" data-value="Packaging">Packaging</button>
-        <button type="button" class="pill" aria-pressed="false" data-value="Editorials &amp; / or Cookbooks">Editorials &amp; / or Cookbooks</button>
+        <button type="button" class="pill" aria-pressed="false" data-value="Editorials/Cookbooks">Editorials/Cookbooks</button>
         <button type="button" class="pill" aria-pressed="false" data-value="Other">Other</button>
       </div>
     </div>
