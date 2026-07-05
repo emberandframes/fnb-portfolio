@@ -4207,8 +4207,11 @@ function showWorkPanel(name, clickedTab) {
     var fab = document.querySelector('.wa-fab');
     var footer = document.querySelector('footer');
     if (!fab || !footer) return;
-    function baseGap(){ return (window.matchMedia && window.matchMedia('(max-width: 600px)').matches) ? 16 : 22; }
+    function isMobile(){ return !!(window.matchMedia && window.matchMedia('(max-width: 600px)').matches); }
+    function baseGap(){ return isMobile() ? 16 : 22; }
     function update(){
+      // On mobile the FAB must never lift with scroll — leave the CSS default in place.
+      if (isMobile()) { fab.style.bottom = ''; return; }
       var rect = footer.getBoundingClientRect();
       var vh = window.innerHeight || document.documentElement.clientHeight;
       var overlap = vh - rect.top; // how far the footer has entered the viewport
