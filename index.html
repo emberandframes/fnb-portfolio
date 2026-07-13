@@ -19,26 +19,26 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Ember &amp; Frames">
-<title>Ember &amp; Frames — Food &amp; Beverage Photography</title>
+<title>Ember &amp; Frames · Food &amp; Beverage Photography</title>
 <meta name="description" content="Every dish has a story. We help brands tell it through images that make people want to order.">
 <!-- Open Graph / link preview cards (WhatsApp, iMessage, Slack, LinkedIn, Facebook). Absolute https:// URLs are required for reliable WhatsApp/iMessage previews. -->
-<link rel="canonical" href="https://emberandframes.github.io/fnb-portfolio/">
+<link rel="canonical" href="https://emberandframes.com/fnb.html">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://emberandframes.github.io/fnb-portfolio/">
+<meta property="og:url" content="https://emberandframes.com/fnb.html">
 <meta property="og:site_name" content="Ember & Frames">
-<meta property="og:title" content="Ember & Frames — Food & Beverage Photography">
+<meta property="og:title" content="Ember & Frames · Food & Beverage Photography">
 <meta property="og:description" content="Every dish has a story. We help brands tell it through images that make people want to order.">
-<meta property="og:image" content="https://emberandframes.github.io/fnb-portfolio/Light/Lunar%20Cafe/DSC03584.jpg">
+<meta property="og:image" content="https://emberandframes.com/assets/media/fnb/Light/Lunar%20Cafe/DSC03584.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="800">
 <meta property="og:image:height" content="1000">
-<meta property="og:image:alt" content="Ember & Frames — Food & Beverage Photography">
+<meta property="og:image:alt" content="Ember & Frames, Food & Beverage Photography">
 <meta property="og:locale" content="en_IN">
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Ember & Frames — Food & Beverage Photography">
+<meta name="twitter:title" content="Ember & Frames · Food & Beverage Photography">
 <meta name="twitter:description" content="Every dish has a story. We help brands tell it through images that make people want to order.">
-<meta name="twitter:image" content="https://emberandframes.github.io/fnb-portfolio/Light/Lunar%20Cafe/DSC03584.jpg">
+<meta name="twitter:image" content="https://emberandframes.com/assets/media/fnb/Light/Lunar%20Cafe/DSC03584.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
@@ -614,18 +614,26 @@
     white-space: nowrap;
   }
   .img-wm--sm { font-size: 9px; letter-spacing: 0.3px; color: rgba(255,255,255,0.62); }
-  body.wm-enhanced .port-item::before,
-  body.wm-enhanced .film-strip-item::before,
-  body.wm-enhanced .hero-img-main::before,
-  body.wm-enhanced .hero-img-sub::before { content: none; }
-
-  /* The brand watermark is now burned into every image file (single source of
-     truth). Suppress all CSS/JS overlay marks to prevent a doubled watermark. */
-  .port-item::before,
+  /* Images are clean (the burned-in mark was removed). Draw a fixed-size SVG
+     brand mark via ::before so the watermark renders at one identical size
+     across every aspect ratio, gallery, and portfolio. Video tiles
+     (.is-video) keep their own burned-in mark and get no overlay. */
+  .port-item:not(.is-video)::before,
   .film-strip-item::before,
   .hero-img-main::before,
-  .hero-img-sub::before { content: none !important; }
-  .img-wm, .lightbox-wm { display: none !important; }
+  .hero-img-sub::before {
+    content: '';
+    background: url('Logos/ef-mark.svg') center/contain no-repeat;
+    width: clamp(30px, 6vw, 46px);
+    height: clamp(30px, 6vw, 46px);
+    right: 8px;
+    bottom: 8px;
+    z-index: 6;
+    opacity: 0.85;
+    filter: drop-shadow(0 0 2px rgba(245,239,230,.95)) drop-shadow(0 1px 2px rgba(0,0,0,.28));
+  }
+  /* Legacy JS-injected text spans + lightbox text mark are no longer shown. */
+  .img-wm, .img-wm--sm, .lightbox-wm { display: none !important; }
 
   /* Lightbox image wrapper — watermark is positioned relative to this */
   .lightbox-img-wrap {
@@ -1503,6 +1511,47 @@
     .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   }
 
+  /* --- Ken Burns — All Work galleries, slow zoom + pan on scroll-in (replays) --- */
+  .portfolio-grid .port-item:not(.is-video).kb-in .port-ph img {
+    animation: kenBurnsFnb 7s ease-in-out both;
+  }
+  @keyframes kenBurnsFnb {
+    0%   { transform: scale(1.05) translate(0, 0); }
+    100% { transform: scale(1.16) translate(-3%, -2%); }
+  }
+
+  /* --- Ember Accent — faint ember sparks drifting up behind the header type --- */
+  nav > .nav-sparks { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .nav-logo, .nav-links, .nav-hamburger { position: relative; z-index: 1; }
+  .nav-sparks .spark {
+    position: absolute; bottom: -10px; width: calc(var(--sz, 5px) * 1.7); height: calc(var(--sz, 5px) * 1.7);
+    background: radial-gradient(circle at 50% 42%, #FFECC2 0%, #F2892E 46%, #D34A1C 100%);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cpath%20d='M50%200Q50%2050%20100%2050Q50%2050%2050%20100Q50%2050%200%2050Q50%2050%2050%200Z'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cpath%20d='M50%200Q50%2050%20100%2050Q50%2050%2050%20100Q50%2050%200%2050Q50%2050%2050%200Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    filter: drop-shadow(0 0 5px rgba(240,130,45,0.98)) drop-shadow(0 0 11px rgba(211,74,28,0.6)); opacity: 0;
+    animation: navRiseFnb var(--d, 6s) linear infinite; animation-delay: var(--delay, 0s);
+  }
+  @keyframes navRiseFnb {
+    0%   { opacity: 0; transform: translateY(0) scale(.6) rotate(0deg); }
+    10%  { opacity: 1; }
+    82%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-72px) scale(1.15) rotate(55deg); }
+  }
+  .nav-logo .brand-amp {
+    color: #C97B3A;
+    text-shadow: 0 0 9px rgba(240,135,46,0.9), 0 0 20px rgba(211,74,28,0.6), 0 0 32px rgba(211,74,28,0.4);
+    animation: ampGlow 3.2s ease-in-out infinite;
+  }
+  @keyframes ampGlow {
+    0%, 100% { text-shadow: 0 0 8px rgba(240,135,46,0.75), 0 0 18px rgba(211,74,28,0.5); }
+    50%      { text-shadow: 0 0 16px rgba(255,175,80,0.98), 0 0 34px rgba(211,74,28,0.7), 0 0 50px rgba(211,74,28,0.45); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .portfolio-grid .port-item:not(.is-video).kb-in .port-ph img { animation: none !important; }
+    .nav-sparks .spark { animation: none !important; opacity: 0 !important; }
+    .nav-logo .brand-amp { animation: none !important; }
+  }
+
   .skip-link {
     position: absolute; top: -100px; left: 8px; z-index: 10001;
     background: var(--charcoal); color: var(--off-white);
@@ -1539,13 +1588,16 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["PhotographyBusiness", "ProfessionalService"],
     "name": "Ember & Frames",
     "description": "Food & beverage photography studio based in Hyderabad. Editorial, advertising and brand-led F&B imagery.",
-    "address": { "@type": "PostalAddress", "addressLocality": "Hyderabad", "addressCountry": "IN" },
+    "url": "https://emberandframes.com/fnb.html",
+    "image": "https://emberandframes.com/assets/media/fnb/Light/Lunar%20Cafe/DSC03584.jpg",
+    "address": { "@type": "PostalAddress", "addressLocality": "Hyderabad", "addressRegion": "Telangana", "addressCountry": "IN" },
     "email": "hello@emberandframes.com",
-    "telephone": "+91-8447402780",
+    "telephone": "+918447402780",
     "areaServed": "IN",
+    "sameAs": ["https://www.instagram.com/emberandframes"],
     "knowsAbout": ["Food photography", "Beverage photography", "Restaurant branding", "Editorial photography", "Product photography"]
   }
   </script>
@@ -1561,6 +1613,7 @@
 
 <nav aria-label="Primary">
   <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+  <span class="nav-sparks" aria-hidden="true"><span class="spark" style="left:6%;--d:6s;--delay:0s;--sz:5px"></span><span class="spark" style="left:13%;--d:7.2s;--delay:1.1s;--sz:6px"></span><span class="spark" style="left:21%;--d:5.4s;--delay:.5s;--sz:4.5px"></span><span class="spark" style="left:29%;--d:8s;--delay:2s;--sz:5.5px"></span><span class="spark" style="left:37%;--d:6.4s;--delay:1.4s;--sz:5px"></span><span class="spark" style="left:45%;--d:7.6s;--delay:.8s;--sz:6px"></span><span class="spark" style="left:52%;--d:5.8s;--delay:2.4s;--sz:4.5px"></span><span class="spark" style="left:60%;--d:6.8s;--delay:1.7s;--sz:5.5px"></span><span class="spark" style="left:68%;--d:7s;--delay:.3s;--sz:5px"></span><span class="spark" style="left:75%;--d:6.2s;--delay:1.9s;--sz:6px"></span><span class="spark" style="left:82%;--d:7.8s;--delay:1s;--sz:4.5px"></span><span class="spark" style="left:90%;--d:5.6s;--delay:2.2s;--sz:5.5px"></span><span class="spark" style="left:96%;--d:6.6s;--delay:.6s;--sz:5px"></span></span>
   <div class="nav-logo"> Ember <span class="brand-amp">&amp;</span> Frames </div>
   <div class="nav-links" id="nav-links">
     <a href="#services">Services</a>
@@ -1620,22 +1673,22 @@
 
   <div class="film-strip-wrap">
     <div class="film-strip" id="film-strip">
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Fish%20Pulimunchi.jpg" alt="Rü — Fish Pulimunchi" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Lunar%20Cafe/DSC03536.jpg" alt="Lunar Cafe — DSC03536" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Tai%20Tai/DSC01920.jpg" alt="Tai Tai — DSC01920" style="object-position: center 82%;" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC03332.jpg" alt="Conçu — DSC03332" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Fish%20Pulimunchi.jpg" alt="Rü, Fish Pulimunchi" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Lunar%20Cafe/DSC03536.jpg" alt="Lunar Cafe, DSC03536" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Tai%20Tai/DSC01920.jpg" alt="Tai Tai, DSC01920" style="object-position: center 82%;" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC03332.jpg" alt="Conçu, DSC03332" /></div>
         <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu%20Hamper/DSC06786.jpg" alt="Sheermal on gold plate – Concu Hamper" /></div>
         <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/DSC04941.jpg" alt="Avocado tart on hand-painted porcelain – Ru and Kinru" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Lunar%20Cafe/DSC03445.jpg" alt="Lunar Cafe — DSC03445" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC03583.jpg" alt="Conçu — DSC03583" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Lunar%20Cafe/DSC03445.jpg" alt="Lunar Cafe, DSC03445" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC03583.jpg" alt="Conçu, DSC03583" /></div>
         <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu%20Hamper/DSC06763.jpg" alt="Concu Hamper" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Shichimi%20Edamame.jpg" alt="Rü — Shichimi Edamame" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC03876.jpg" alt="Conçu — DSC03876" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Tai%20Tai/DSC01382.jpg" alt="Tai Tai — DSC01382" style="object-position: center 82%;" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Shichimi%20Edamame.jpg" alt="Rü, Shichimi Edamame" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC03876.jpg" alt="Conçu, DSC03876" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Tai%20Tai/DSC01382.jpg" alt="Tai Tai, DSC01382" style="object-position: center 82%;" /></div>
         <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu%20Hamper/DSC06718.jpg" alt="Concu Hamper" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/DSC05601.jpg" alt="Rü — DSC05601" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC04269.jpg" alt="Conçu — DSC04269" /></div>
-        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Lunar%20Cafe/DSC03940.jpg" alt="Lunar Cafe — DSC03940" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Ru%20and%20Kinru/DSC05601.jpg" alt="Rü, DSC05601" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Concu/DSC04269.jpg" alt="Conçu, DSC04269" /></div>
+        <div class="film-strip-item"><img loading="eager" decoding="async" src="Light/Lunar%20Cafe/DSC03940.jpg" alt="Lunar Cafe, DSC03940" /></div>
     </div>
     <div class="film-strip-nav">
       <button class="film-strip-btn" id="film-strip-prev" type="button" aria-label="Scroll previous">&#x2190;</button>
@@ -1689,7 +1742,7 @@
     <h2 style="text-align:center">All <em>Work</em></h2>
   </div>
   <div class="clients-tabs" style="display:flex; gap:0; justify-content:center; margin-bottom:0; border-bottom:1px solid rgba(201,168,76,0.2);">
-    <label for="tab-ru" class="client-tab" data-client="ru" style="padding:14px 36px; font-size:11px; letter-spacing:3px; text-transform:uppercase; cursor:pointer; color:rgba(42,42,37,0.45); border-bottom:2px solid transparent; margin-bottom:-1px; transition:color 0.25s ease, border-color 0.25s ease;">Rü — Craft Bar</label>
+    <label for="tab-ru" class="client-tab" data-client="ru" style="padding:14px 36px; font-size:11px; letter-spacing:3px; text-transform:uppercase; cursor:pointer; color:rgba(42,42,37,0.45); border-bottom:2px solid transparent; margin-bottom:-1px; transition:color 0.25s ease, border-color 0.25s ease;">Rü Craft Bar</label>
     <label for="tab-lunar" class="client-tab" data-client="lunar" style="padding:14px 36px; font-size:11px; letter-spacing:3px; text-transform:uppercase; cursor:pointer; color:rgba(42,42,37,0.45); border-bottom:2px solid transparent; margin-bottom:-1px; transition:color 0.25s ease, border-color 0.25s ease;">Lunar Cafe</label>
     <label for="tab-concu" class="client-tab" data-client="concu" style="padding:14px 36px; font-size:11px; letter-spacing:3px; text-transform:uppercase; cursor:pointer; color:rgba(42,42,37,0.45); border-bottom:2px solid transparent; margin-bottom:-1px; transition:color 0.25s ease, border-color 0.25s ease;">Conçu</label>
     <label for="tab-tai" class="client-tab" data-client="tai" style="padding:14px 36px; font-size:11px; letter-spacing:3px; text-transform:uppercase; cursor:pointer; color:rgba(42,42,37,0.45); border-bottom:2px solid transparent; margin-bottom:-1px; transition:color 0.25s ease, border-color 0.25s ease;">Tai Tai</label>
@@ -1717,273 +1770,273 @@
   <div class="client-panel" id="panel-concu" style="padding-top:32px;">
     <div class="portfolio-grid" id="concu-grid">
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03919.jpg" data-full="Light/Concu/DSC03919.jpg" alt="Conçu — DSC03919"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03919.jpg" data-full="Light/Concu/DSC03919.jpg" alt="Conçu, DSC03919"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03363.jpg" data-full="Light/Concu/DSC03363.jpg" alt="Conçu — DSC03363"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03363.jpg" data-full="Light/Concu/DSC03363.jpg" alt="Conçu, DSC03363"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04713.jpg" data-full="Light/Concu/DSC04713.jpg" alt="Conçu — DSC04713"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04713.jpg" data-full="Light/Concu/DSC04713.jpg" alt="Conçu, DSC04713"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04746.jpg" data-full="Light/Concu/DSC04746.jpg" alt="Conçu — DSC04746"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04746.jpg" data-full="Light/Concu/DSC04746.jpg" alt="Conçu, DSC04746"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03332.jpg" data-full="Light/Concu/DSC03332.jpg" alt="Conçu — DSC03332"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03332.jpg" data-full="Light/Concu/DSC03332.jpg" alt="Conçu, DSC03332"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04865.jpg" data-full="Light/Concu/DSC04865.jpg" alt="Conçu — DSC04865"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04865.jpg" data-full="Light/Concu/DSC04865.jpg" alt="Conçu, DSC04865"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04806.jpg" data-full="Light/Concu/DSC04806.jpg" alt="Conçu — DSC04806"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04806.jpg" data-full="Light/Concu/DSC04806.jpg" alt="Conçu, DSC04806"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04607.jpg" data-full="Light/Concu/DSC04607.jpg" alt="Conçu — DSC04607"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04607.jpg" data-full="Light/Concu/DSC04607.jpg" alt="Conçu, DSC04607"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04046.jpg" data-full="Light/Concu/DSC04046.jpg" alt="Conçu — DSC04046"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04046.jpg" data-full="Light/Concu/DSC04046.jpg" alt="Conçu, DSC04046"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04142.jpg" data-full="Light/Concu/DSC04142.jpg" alt="Conçu — DSC04142"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04142.jpg" data-full="Light/Concu/DSC04142.jpg" alt="Conçu, DSC04142"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03452.jpg" data-full="Light/Concu/DSC03452.jpg" alt="Conçu — DSC03452"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03452.jpg" data-full="Light/Concu/DSC03452.jpg" alt="Conçu, DSC03452"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04419.jpg" data-full="Light/Concu/DSC04419.jpg" alt="Conçu — DSC04419"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04419.jpg" data-full="Light/Concu/DSC04419.jpg" alt="Conçu, DSC04419"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03686.jpg" data-full="Light/Concu/DSC03686.jpg" alt="Conçu — DSC03686"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03686.jpg" data-full="Light/Concu/DSC03686.jpg" alt="Conçu, DSC03686"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03766.jpg" data-full="Light/Concu/DSC03766.jpg" alt="Conçu — DSC03766"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03766.jpg" data-full="Light/Concu/DSC03766.jpg" alt="Conçu, DSC03766"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04429.jpg" data-full="Light/Concu/DSC04429.jpg" alt="Conçu — DSC04429"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04429.jpg" data-full="Light/Concu/DSC04429.jpg" alt="Conçu, DSC04429"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03876.jpg" data-full="Light/Concu/DSC03876.jpg" alt="Conçu — DSC03876"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03876.jpg" data-full="Light/Concu/DSC03876.jpg" alt="Conçu, DSC03876"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04773.jpg" data-full="Light/Concu/DSC04773.jpg" alt="Conçu — DSC04773"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04773.jpg" data-full="Light/Concu/DSC04773.jpg" alt="Conçu, DSC04773"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04369.jpg" data-full="Light/Concu/DSC04369.jpg" alt="Conçu — DSC04369"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04369.jpg" data-full="Light/Concu/DSC04369.jpg" alt="Conçu, DSC04369"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03756.jpg" data-full="Light/Concu/DSC03756.jpg" alt="Conçu — DSC03756"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03756.jpg" data-full="Light/Concu/DSC03756.jpg" alt="Conçu, DSC03756"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03979.jpg" data-full="Light/Concu/DSC03979.jpg" alt="Conçu — DSC03979"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03979.jpg" data-full="Light/Concu/DSC03979.jpg" alt="Conçu, DSC03979"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04352.jpg" data-full="Light/Concu/DSC04352.jpg" alt="Conçu — DSC04352"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04352.jpg" data-full="Light/Concu/DSC04352.jpg" alt="Conçu, DSC04352"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04791.jpg" data-full="Light/Concu/DSC04791.jpg" alt="Conçu — DSC04791"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04791.jpg" data-full="Light/Concu/DSC04791.jpg" alt="Conçu, DSC04791"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03810.jpg" data-full="Light/Concu/DSC03810.jpg" alt="Conçu — DSC03810"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03810.jpg" data-full="Light/Concu/DSC03810.jpg" alt="Conçu, DSC03810"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04165.jpg" data-full="Light/Concu/DSC04165.jpg" alt="Conçu — DSC04165"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04165.jpg" data-full="Light/Concu/DSC04165.jpg" alt="Conçu, DSC04165"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04479.jpg" data-full="Light/Concu/DSC04479.jpg" alt="Conçu — DSC04479"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04479.jpg" data-full="Light/Concu/DSC04479.jpg" alt="Conçu, DSC04479"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04875.jpg" data-full="Light/Concu/DSC04875.jpg" alt="Conçu — DSC04875"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04875.jpg" data-full="Light/Concu/DSC04875.jpg" alt="Conçu, DSC04875"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03583.jpg" data-full="Light/Concu/DSC03583.jpg" alt="Conçu — DSC03583"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03583.jpg" data-full="Light/Concu/DSC03583.jpg" alt="Conçu, DSC03583"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04804.jpg" data-full="Light/Concu/DSC04804.jpg" alt="Conçu — DSC04804"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04804.jpg" data-full="Light/Concu/DSC04804.jpg" alt="Conçu, DSC04804"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03358.jpg" data-full="Light/Concu/DSC03358.jpg" alt="Conçu — DSC03358"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03358.jpg" data-full="Light/Concu/DSC03358.jpg" alt="Conçu, DSC03358"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04862.jpg" data-full="Light/Concu/DSC04862.jpg" alt="Conçu — DSC04862"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04862.jpg" data-full="Light/Concu/DSC04862.jpg" alt="Conçu, DSC04862"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04269.jpg" data-full="Light/Concu/DSC04269.jpg" alt="Conçu — DSC04269"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04269.jpg" data-full="Light/Concu/DSC04269.jpg" alt="Conçu, DSC04269"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03303.1.jpg" data-full="Light/Concu/DSC03303.1.jpg" alt="Conçu — DSC03303.1"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03303.1.jpg" data-full="Light/Concu/DSC03303.1.jpg" alt="Conçu, DSC03303.1"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04223.jpg" data-full="Light/Concu/DSC04223.jpg" alt="Conçu — DSC04223"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04223.jpg" data-full="Light/Concu/DSC04223.jpg" alt="Conçu, DSC04223"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04135.jpg" data-full="Light/Concu/DSC04135.jpg" alt="Conçu — DSC04135"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04135.jpg" data-full="Light/Concu/DSC04135.jpg" alt="Conçu, DSC04135"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04034.jpg" data-full="Light/Concu/DSC04034.jpg" alt="Conçu — DSC04034"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04034.jpg" data-full="Light/Concu/DSC04034.jpg" alt="Conçu, DSC04034"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04600.jpg" data-full="Light/Concu/DSC04600.jpg" alt="Conçu — DSC04600"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04600.jpg" data-full="Light/Concu/DSC04600.jpg" alt="Conçu, DSC04600"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04873.jpg" data-full="Light/Concu/DSC04873.jpg" alt="Conçu — DSC04873"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04873.jpg" data-full="Light/Concu/DSC04873.jpg" alt="Conçu, DSC04873"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03383.jpg" data-full="Light/Concu/DSC03383.jpg" alt="Conçu — DSC03383"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC03383.jpg" data-full="Light/Concu/DSC03383.jpg" alt="Conçu, DSC03383"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04637.jpg" data-full="Light/Concu/DSC04637.jpg" alt="Conçu — DSC04637"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Concu/DSC04637.jpg" data-full="Light/Concu/DSC04637.jpg" alt="Conçu, DSC04637"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
@@ -2014,448 +2067,448 @@
   <div class="client-panel" id="panel-ru-menu" style="padding-top:32px;">
     <div class="portfolio-grid" id="ru-grid">
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Asparagus%20Black%20Garlic%20Dimsum.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Asparagus%20Black%20Garlic%20Dimsum.jpg" alt="Rü — Asparagus Black Garlic Dimsum"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Asparagus%20Black%20Garlic%20Dimsum.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Asparagus%20Black%20Garlic%20Dimsum.jpg" alt="Rü, Asparagus Black Garlic Dimsum"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Chicken%20Karaage.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Chicken%20Karaage.jpg" alt="Rü — Chicken Karaage"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Chicken%20Karaage.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Chicken%20Karaage.jpg" alt="Rü, Chicken Karaage"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08978.jpg" data-full="Light/Ru%20and%20Kinru/DSC08978.jpg" alt="Rü — DSC08978"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08978.jpg" data-full="Light/Ru%20and%20Kinru/DSC08978.jpg" alt="Rü, DSC08978"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05125.jpg" data-full="Light/Ru%20and%20Kinru/DSC05125.jpg" alt="Rü — DSC05125"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05125.jpg" data-full="Light/Ru%20and%20Kinru/DSC05125.jpg" alt="Rü, DSC05125"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05114.jpg" data-full="Light/Ru%20and%20Kinru/DSC05114.jpg" alt="Rü — DSC05114"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05114.jpg" data-full="Light/Ru%20and%20Kinru/DSC05114.jpg" alt="Rü, DSC05114"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC03256.jpg" data-full="Light/Ru%20and%20Kinru/DSC03256.jpg" alt="Rü — DSC03256"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC03256.jpg" data-full="Light/Ru%20and%20Kinru/DSC03256.jpg" alt="Rü, DSC03256"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05206.jpg" data-full="Light/Ru%20and%20Kinru/DSC05206.jpg" alt="Rü — DSC05206"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05206.jpg" data-full="Light/Ru%20and%20Kinru/DSC05206.jpg" alt="Rü, DSC05206"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/_JOY0070.jpg" data-full="Light/Ru%20and%20Kinru/_JOY0070.jpg" alt="Rü — _JOY0070"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/_JOY0070.jpg" data-full="Light/Ru%20and%20Kinru/_JOY0070.jpg" alt="Rü, _JOY0070"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Pharoah_s%20fizz.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Pharoah_s%20fizz.jpg" alt="Rü — Pharoah_s fizz"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Pharoah_s%20fizz.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Pharoah_s%20fizz.jpg" alt="Rü, Pharoah_s fizz"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20DSC07326.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20DSC07326.jpg" alt="Rü — DSC07326"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20DSC07326.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20DSC07326.jpg" alt="Rü, DSC07326"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08516.jpg" data-full="Light/Ru%20and%20Kinru/DSC08516.jpg" alt="Rü — DSC08516"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08516.jpg" data-full="Light/Ru%20and%20Kinru/DSC08516.jpg" alt="Rü, DSC08516"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Kerala%20Fried%20Chicken.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Kerala%20Fried%20Chicken.jpg" alt="Rü — Kerala Fried Chicken"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Kerala%20Fried%20Chicken.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Kerala%20Fried%20Chicken.jpg" alt="Rü, Kerala Fried Chicken"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Bidri%20of%20Banjara.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Bidri%20of%20Banjara.jpg" alt="Rü — Bidri of Banjara"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Bidri%20of%20Banjara.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Bidri%20of%20Banjara.jpg" alt="Rü, Bidri of Banjara"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20DSC07351.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20DSC07351.jpg" alt="Rü — DSC07351"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20DSC07351.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20DSC07351.jpg" alt="Rü, DSC07351"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05044.jpg" data-full="Light/Ru%20and%20Kinru/DSC05044.jpg" alt="Rü — DSC05044"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05044.jpg" data-full="Light/Ru%20and%20Kinru/DSC05044.jpg" alt="Rü, DSC05044"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05089.jpg" data-full="Light/Ru%20and%20Kinru/DSC05089.jpg" alt="Rü — DSC05089"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05089.jpg" data-full="Light/Ru%20and%20Kinru/DSC05089.jpg" alt="Rü, DSC05089"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05186.jpg" data-full="Light/Ru%20and%20Kinru/DSC05186.jpg" alt="Rü — DSC05186"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05186.jpg" data-full="Light/Ru%20and%20Kinru/DSC05186.jpg" alt="Rü, DSC05186"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Khumb%20Peshawari.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Khumb%20Peshawari.jpg" alt="Rü — Khumb Peshawari"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Khumb%20Peshawari.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Khumb%20Peshawari.jpg" alt="Rü, Khumb Peshawari"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05379.jpg" data-full="Light/Ru%20and%20Kinru/DSC05379.jpg" alt="Rü — DSC05379"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05379.jpg" data-full="Light/Ru%20and%20Kinru/DSC05379.jpg" alt="Rü, DSC05379"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Black%20Pepper%20Prawns.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Black%20Pepper%20Prawns.jpg" alt="Rü — Black Pepper Prawns"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Black%20Pepper%20Prawns.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Black%20Pepper%20Prawns.jpg" alt="Rü, Black Pepper Prawns"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05332.jpg" data-full="Light/Ru%20and%20Kinru/DSC05332.jpg" alt="Rü — DSC05332"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05332.jpg" data-full="Light/Ru%20and%20Kinru/DSC05332.jpg" alt="Rü, DSC05332"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05074.jpg" data-full="Light/Ru%20and%20Kinru/DSC05074.jpg" alt="Rü — DSC05074"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05074.jpg" data-full="Light/Ru%20and%20Kinru/DSC05074.jpg" alt="Rü, DSC05074"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Turnip%20Cake.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Turnip%20Cake.jpg" alt="Rü — Turnip Cake"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Turnip%20Cake.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Turnip%20Cake.jpg" alt="Rü, Turnip Cake"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Fish%20Pulimunchi.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Fish%20Pulimunchi.jpg" alt="Rü — Fish Pulimunchi"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Fish%20Pulimunchi.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Fish%20Pulimunchi.jpg" alt="Rü, Fish Pulimunchi"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC03235.jpg" data-full="Light/Ru%20and%20Kinru/DSC03235.jpg" alt="Rü — DSC03235"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC03235.jpg" data-full="Light/Ru%20and%20Kinru/DSC03235.jpg" alt="Rü, DSC03235"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Royyala%20Vepudu.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Royyala%20Vepudu.jpg" alt="Rü — Royyala Vepudu"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Royyala%20Vepudu.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Royyala%20Vepudu.jpg" alt="Rü, Royyala Vepudu"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC07338.jpg" data-full="Light/Ru%20and%20Kinru/DSC07338.jpg" alt="Rü — DSC07338"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC07338.jpg" data-full="Light/Ru%20and%20Kinru/DSC07338.jpg" alt="Rü, DSC07338"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05297.jpg" data-full="Light/Ru%20and%20Kinru/DSC05297.jpg" alt="Rü — DSC05297"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05297.jpg" data-full="Light/Ru%20and%20Kinru/DSC05297.jpg" alt="Rü, DSC05297"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05070.jpg" data-full="Light/Ru%20and%20Kinru/DSC05070.jpg" alt="Rü — DSC05070"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05070.jpg" data-full="Light/Ru%20and%20Kinru/DSC05070.jpg" alt="Rü, DSC05070"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08462.jpg" data-full="Light/Ru%20and%20Kinru/DSC08462.jpg" alt="Rü — DSC08462"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08462.jpg" data-full="Light/Ru%20and%20Kinru/DSC08462.jpg" alt="Rü, DSC08462"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Dal%20Ru.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Dal%20Ru.jpg" alt="Rü — Dal Ru"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Dal%20Ru.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Dal%20Ru.jpg" alt="Rü, Dal Ru"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Moong%20Dal%20Halwa.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Moong%20Dal%20Halwa.jpg" alt="Rü — Moong Dal Halwa"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Moong%20Dal%20Halwa.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Moong%20Dal%20Halwa.jpg" alt="Rü, Moong Dal Halwa"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05527.jpg" data-full="Light/Ru%20and%20Kinru/DSC05527.jpg" alt="Rü — DSC05527"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05527.jpg" data-full="Light/Ru%20and%20Kinru/DSC05527.jpg" alt="Rü, DSC05527"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Smoked%20Pimiento.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Smoked%20Pimiento.jpg" alt="Rü — Smoked Pimiento"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Smoked%20Pimiento.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Smoked%20Pimiento.jpg" alt="Rü, Smoked Pimiento"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC03286.jpg" data-full="Light/Ru%20and%20Kinru/DSC03286.jpg" alt="Rü — DSC03286"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC03286.jpg" data-full="Light/Ru%20and%20Kinru/DSC03286.jpg" alt="Rü, DSC03286"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Shichimi%20Edamame.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Shichimi%20Edamame.jpg" alt="Rü — Shichimi Edamame"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Shichimi%20Edamame.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Shichimi%20Edamame.jpg" alt="Rü, Shichimi Edamame"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05111.jpg" data-full="Light/Ru%20and%20Kinru/DSC05111.jpg" alt="Rü — DSC05111"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05111.jpg" data-full="Light/Ru%20and%20Kinru/DSC05111.jpg" alt="Rü, DSC05111"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Banarasi%20Malai%20Kofta.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Banarasi%20Malai%20Kofta.jpg" alt="Rü — Banarasi Malai Kofta"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Banarasi%20Malai%20Kofta.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Banarasi%20Malai%20Kofta.jpg" alt="Rü, Banarasi Malai Kofta"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08330.jpg" data-full="Light/Ru%20and%20Kinru/DSC08330.jpg" alt="Rü — DSC08330"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08330.jpg" data-full="Light/Ru%20and%20Kinru/DSC08330.jpg" alt="Rü, DSC08330"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08589.jpg" data-full="Light/Ru%20and%20Kinru/DSC08589.jpg" alt="Rü — DSC08589"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08589.jpg" data-full="Light/Ru%20and%20Kinru/DSC08589.jpg" alt="Rü, DSC08589"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/_JOY0064.jpg" data-full="Light/Ru%20and%20Kinru/_JOY0064.jpg" alt="Rü — _JOY0064"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/_JOY0064.jpg" data-full="Light/Ru%20and%20Kinru/_JOY0064.jpg" alt="Rü, _JOY0064"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08596.jpg" data-full="Light/Ru%20and%20Kinru/DSC08596.jpg" alt="Rü — DSC08596"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC08596.jpg" data-full="Light/Ru%20and%20Kinru/DSC08596.jpg" alt="Rü, DSC08596"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC04944.jpg" data-full="Light/Ru%20and%20Kinru/DSC04944.jpg" alt="Rü — DSC04944"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC04944.jpg" data-full="Light/Ru%20and%20Kinru/DSC04944.jpg" alt="Rü, DSC04944"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Paneer%20Tikka.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Paneer%20Tikka.jpg" alt="Rü — Paneer Tikka"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Paneer%20Tikka.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Paneer%20Tikka.jpg" alt="Rü, Paneer Tikka"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05008.jpg" data-full="Light/Ru%20and%20Kinru/DSC05008.jpg" alt="Rü — DSC05008"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05008.jpg" data-full="Light/Ru%20and%20Kinru/DSC05008.jpg" alt="Rü, DSC05008"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05680.jpg" data-full="Light/Ru%20and%20Kinru/DSC05680.jpg" alt="Rü — DSC05680"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05680.jpg" data-full="Light/Ru%20and%20Kinru/DSC05680.jpg" alt="Rü, DSC05680"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05255.jpg" data-full="Light/Ru%20and%20Kinru/DSC05255.jpg" alt="Rü — DSC05255"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05255.jpg" data-full="Light/Ru%20and%20Kinru/DSC05255.jpg" alt="Rü, DSC05255"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05460.jpg" data-full="Light/Ru%20and%20Kinru/DSC05460.jpg" alt="Rü — DSC05460"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05460.jpg" data-full="Light/Ru%20and%20Kinru/DSC05460.jpg" alt="Rü, DSC05460"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05269.jpg" data-full="Light/Ru%20and%20Kinru/DSC05269.jpg" alt="Rü — DSC05269"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05269.jpg" data-full="Light/Ru%20and%20Kinru/DSC05269.jpg" alt="Rü, DSC05269"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05179.jpg" data-full="Light/Ru%20and%20Kinru/DSC05179.jpg" alt="Rü — DSC05179"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05179.jpg" data-full="Light/Ru%20and%20Kinru/DSC05179.jpg" alt="Rü, DSC05179"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20DSC07344.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20DSC07344.jpg" alt="Rü — DSC07344"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20DSC07344.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20DSC07344.jpg" alt="Rü, DSC07344"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC04978.jpg" data-full="Light/Ru%20and%20Kinru/DSC04978.jpg" alt="Rü — DSC04978"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC04978.jpg" data-full="Light/Ru%20and%20Kinru/DSC04978.jpg" alt="Rü, DSC04978"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05692.jpg" data-full="Light/Ru%20and%20Kinru/DSC05692.jpg" alt="Rü — DSC05692"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05692.jpg" data-full="Light/Ru%20and%20Kinru/DSC05692.jpg" alt="Rü, DSC05692"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05421.jpg" data-full="Light/Ru%20and%20Kinru/DSC05421.jpg" alt="Rü — DSC05421"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05421.jpg" data-full="Light/Ru%20and%20Kinru/DSC05421.jpg" alt="Rü, DSC05421"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05237.jpg" data-full="Light/Ru%20and%20Kinru/DSC05237.jpg" alt="Rü — DSC05237"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05237.jpg" data-full="Light/Ru%20and%20Kinru/DSC05237.jpg" alt="Rü, DSC05237"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05038.jpg" data-full="Light/Ru%20and%20Kinru/DSC05038.jpg" alt="Rü — DSC05038"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05038.jpg" data-full="Light/Ru%20and%20Kinru/DSC05038.jpg" alt="Rü, DSC05038"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05601.jpg" data-full="Light/Ru%20and%20Kinru/DSC05601.jpg" alt="Rü — DSC05601"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05601.jpg" data-full="Light/Ru%20and%20Kinru/DSC05601.jpg" alt="Rü, DSC05601"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05253.jpg" data-full="Light/Ru%20and%20Kinru/DSC05253.jpg" alt="Rü — DSC05253"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05253.jpg" data-full="Light/Ru%20and%20Kinru/DSC05253.jpg" alt="Rü, DSC05253"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05688.jpg" data-full="Light/Ru%20and%20Kinru/DSC05688.jpg" alt="Rü — DSC05688"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05688.jpg" data-full="Light/Ru%20and%20Kinru/DSC05688.jpg" alt="Rü, DSC05688"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC04946.jpg" data-full="Light/Ru%20and%20Kinru/DSC04946.jpg" alt="Rü — DSC04946"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC04946.jpg" data-full="Light/Ru%20and%20Kinru/DSC04946.jpg" alt="Rü, DSC04946"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Avocado%20Papdi%20Chaat.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Avocado%20Papdi%20Chaat.jpg" alt="Rü — Avocado Papdi Chaat"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/Copy%20of%20Avocado%20Papdi%20Chaat.jpg" data-full="Light/Ru%20and%20Kinru/Copy%20of%20Avocado%20Papdi%20Chaat.jpg" alt="Rü, Avocado Papdi Chaat"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05377.jpg" data-full="Light/Ru%20and%20Kinru/DSC05377.jpg" alt="Rü — DSC05377"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05377.jpg" data-full="Light/Ru%20and%20Kinru/DSC05377.jpg" alt="Rü, DSC05377"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05145.jpg" data-full="Light/Ru%20and%20Kinru/DSC05145.jpg" alt="Rü — DSC05145"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05145.jpg" data-full="Light/Ru%20and%20Kinru/DSC05145.jpg" alt="Rü, DSC05145"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
       </div>
     </div>
     <div class="port-item">
-      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05484.jpg" data-full="Light/Ru%20and%20Kinru/DSC05484.jpg" alt="Rü — DSC05484"></div>
+      <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Ru%20and%20Kinru/DSC05484.jpg" data-full="Light/Ru%20and%20Kinru/DSC05484.jpg" alt="Rü, DSC05484"></div>
       <div class="port-overlay">
         <div class="port-title"></div>
         <div class="port-sub"></div>
@@ -2724,203 +2777,203 @@
   </div>
     <div class="portfolio-grid" id="lunar-grid">
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03801.jpg" data-full="Light/Lunar%20Cafe/DSC03801.jpg" alt="Lunar Cafe — DSC03801"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03801.jpg" data-full="Light/Lunar%20Cafe/DSC03801.jpg" alt="Lunar Cafe, DSC03801"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03429.jpg" data-full="Light/Lunar%20Cafe/DSC03429.jpg" alt="Lunar Cafe — DSC03429"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03429.jpg" data-full="Light/Lunar%20Cafe/DSC03429.jpg" alt="Lunar Cafe, DSC03429"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03311.jpg" data-full="Light/Lunar%20Cafe/DSC03311.jpg" alt="Lunar Cafe — DSC03311"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03311.jpg" data-full="Light/Lunar%20Cafe/DSC03311.jpg" alt="Lunar Cafe, DSC03311"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03445.jpg" data-full="Light/Lunar%20Cafe/DSC03445.jpg" alt="Lunar Cafe — DSC03445"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03445.jpg" data-full="Light/Lunar%20Cafe/DSC03445.jpg" alt="Lunar Cafe, DSC03445"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03644.jpg" data-full="Light/Lunar%20Cafe/DSC03644.jpg" alt="Lunar Cafe — DSC03644"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03644.jpg" data-full="Light/Lunar%20Cafe/DSC03644.jpg" alt="Lunar Cafe, DSC03644"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03804.jpg" data-full="Light/Lunar%20Cafe/DSC03804.jpg" alt="Lunar Cafe — DSC03804"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03804.jpg" data-full="Light/Lunar%20Cafe/DSC03804.jpg" alt="Lunar Cafe, DSC03804"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03830.jpg" data-full="Light/Lunar%20Cafe/DSC03830.jpg" alt="Lunar Cafe — DSC03830"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03830.jpg" data-full="Light/Lunar%20Cafe/DSC03830.jpg" alt="Lunar Cafe, DSC03830"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03541.jpg" data-full="Light/Lunar%20Cafe/DSC03541.jpg" alt="Lunar Cafe — DSC03541"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03541.jpg" data-full="Light/Lunar%20Cafe/DSC03541.jpg" alt="Lunar Cafe, DSC03541"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03303.jpg" data-full="Light/Lunar%20Cafe/DSC03303.jpg" alt="Lunar Cafe — DSC03303"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03303.jpg" data-full="Light/Lunar%20Cafe/DSC03303.jpg" alt="Lunar Cafe, DSC03303"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03567.jpg" data-full="Light/Lunar%20Cafe/DSC03567.jpg" alt="Lunar Cafe — DSC03567"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03567.jpg" data-full="Light/Lunar%20Cafe/DSC03567.jpg" alt="Lunar Cafe, DSC03567"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03881.jpg" data-full="Light/Lunar%20Cafe/DSC03881.jpg" alt="Lunar Cafe — DSC03881"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03881.jpg" data-full="Light/Lunar%20Cafe/DSC03881.jpg" alt="Lunar Cafe, DSC03881"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03880.jpg" data-full="Light/Lunar%20Cafe/DSC03880.jpg" alt="Lunar Cafe — DSC03880"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03880.jpg" data-full="Light/Lunar%20Cafe/DSC03880.jpg" alt="Lunar Cafe, DSC03880"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03909.jpg" data-full="Light/Lunar%20Cafe/DSC03909.jpg" alt="Lunar Cafe — DSC03909"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03909.jpg" data-full="Light/Lunar%20Cafe/DSC03909.jpg" alt="Lunar Cafe, DSC03909"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03940.jpg" data-full="Light/Lunar%20Cafe/DSC03940.jpg" alt="Lunar Cafe — DSC03940"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03940.jpg" data-full="Light/Lunar%20Cafe/DSC03940.jpg" alt="Lunar Cafe, DSC03940"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03891.jpg" data-full="Light/Lunar%20Cafe/DSC03891.jpg" alt="Lunar Cafe — DSC03891"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03891.jpg" data-full="Light/Lunar%20Cafe/DSC03891.jpg" alt="Lunar Cafe, DSC03891"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03284.jpg" data-full="Light/Lunar%20Cafe/DSC03284.jpg" alt="Lunar Cafe — DSC03284"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03284.jpg" data-full="Light/Lunar%20Cafe/DSC03284.jpg" alt="Lunar Cafe, DSC03284"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03609.jpg" data-full="Light/Lunar%20Cafe/DSC03609.jpg" alt="Lunar Cafe — DSC03609"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03609.jpg" data-full="Light/Lunar%20Cafe/DSC03609.jpg" alt="Lunar Cafe, DSC03609"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03941.jpg" data-full="Light/Lunar%20Cafe/DSC03941.jpg" alt="Lunar Cafe — DSC03941"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03941.jpg" data-full="Light/Lunar%20Cafe/DSC03941.jpg" alt="Lunar Cafe, DSC03941"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03268.jpg" data-full="Light/Lunar%20Cafe/DSC03268.jpg" alt="Lunar Cafe — DSC03268"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03268.jpg" data-full="Light/Lunar%20Cafe/DSC03268.jpg" alt="Lunar Cafe, DSC03268"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03698.jpg" data-full="Light/Lunar%20Cafe/DSC03698.jpg" alt="Lunar Cafe — DSC03698"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03698.jpg" data-full="Light/Lunar%20Cafe/DSC03698.jpg" alt="Lunar Cafe, DSC03698"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03569.jpg" data-full="Light/Lunar%20Cafe/DSC03569.jpg" alt="Lunar Cafe — DSC03569"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03569.jpg" data-full="Light/Lunar%20Cafe/DSC03569.jpg" alt="Lunar Cafe, DSC03569"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03747.jpg" data-full="Light/Lunar%20Cafe/DSC03747.jpg" alt="Lunar Cafe — DSC03747"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03747.jpg" data-full="Light/Lunar%20Cafe/DSC03747.jpg" alt="Lunar Cafe, DSC03747"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03932.jpg" data-full="Light/Lunar%20Cafe/DSC03932.jpg" alt="Lunar Cafe — DSC03932"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03932.jpg" data-full="Light/Lunar%20Cafe/DSC03932.jpg" alt="Lunar Cafe, DSC03932"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03497.jpg" data-full="Light/Lunar%20Cafe/DSC03497.jpg" alt="Lunar Cafe — DSC03497"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03497.jpg" data-full="Light/Lunar%20Cafe/DSC03497.jpg" alt="Lunar Cafe, DSC03497"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03640.jpg" data-full="Light/Lunar%20Cafe/DSC03640.jpg" alt="Lunar Cafe — DSC03640"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03640.jpg" data-full="Light/Lunar%20Cafe/DSC03640.jpg" alt="Lunar Cafe, DSC03640"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03700.jpg" data-full="Light/Lunar%20Cafe/DSC03700.jpg" alt="Lunar Cafe — DSC03700"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03700.jpg" data-full="Light/Lunar%20Cafe/DSC03700.jpg" alt="Lunar Cafe, DSC03700"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03800.jpg" data-full="Light/Lunar%20Cafe/DSC03800.jpg" alt="Lunar Cafe — DSC03800"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03800.jpg" data-full="Light/Lunar%20Cafe/DSC03800.jpg" alt="Lunar Cafe, DSC03800"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03536.jpg" data-full="Light/Lunar%20Cafe/DSC03536.jpg" alt="Lunar Cafe — DSC03536"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03536.jpg" data-full="Light/Lunar%20Cafe/DSC03536.jpg" alt="Lunar Cafe, DSC03536"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
         </div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03398.jpg" data-full="Light/Lunar%20Cafe/DSC03398.jpg" alt="Lunar Cafe — DSC03398"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Lunar%20Cafe/DSC03398.jpg" data-full="Light/Lunar%20Cafe/DSC03398.jpg" alt="Lunar Cafe, DSC03398"></div>
         <div class="port-overlay">
           <div class="port-title"></div>
           <div class="port-sub"></div>
@@ -3018,51 +3071,51 @@
   </div>
     <div class="portfolio-grid" id="tai-grid">
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01920.jpg" data-full="Light/Tai%20Tai/DSC01920.jpg" alt="Tai Tai — DSC01920"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01920.jpg" data-full="Light/Tai%20Tai/DSC01920.jpg" alt="Tai Tai, DSC01920"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01749.jpg" data-full="Light/Tai%20Tai/DSC01749.jpg" alt="Tai Tai — DSC01749"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01749.jpg" data-full="Light/Tai%20Tai/DSC01749.jpg" alt="Tai Tai, DSC01749"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01382.jpg" data-full="Light/Tai%20Tai/DSC01382.jpg" alt="Tai Tai — DSC01382"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01382.jpg" data-full="Light/Tai%20Tai/DSC01382.jpg" alt="Tai Tai, DSC01382"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01653.jpg" data-full="Light/Tai%20Tai/DSC01653.jpg" alt="Tai Tai — DSC01653"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01653.jpg" data-full="Light/Tai%20Tai/DSC01653.jpg" alt="Tai Tai, DSC01653"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01664-2.jpg" data-full="Light/Tai%20Tai/DSC01664-2.jpg" alt="Tai Tai — DSC01664"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01664-2.jpg" data-full="Light/Tai%20Tai/DSC01664-2.jpg" alt="Tai Tai, DSC01664"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01545.jpg" data-full="Light/Tai%20Tai/DSC01545.jpg" alt="Tai Tai — DSC01545"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01545.jpg" data-full="Light/Tai%20Tai/DSC01545.jpg" alt="Tai Tai, DSC01545"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC02042.jpg" data-full="Light/Tai%20Tai/DSC02042.jpg" alt="Tai Tai — DSC02042"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC02042.jpg" data-full="Light/Tai%20Tai/DSC02042.jpg" alt="Tai Tai, DSC02042"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01405.jpg" data-full="Light/Tai%20Tai/DSC01405.jpg" alt="Tai Tai — DSC01405"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01405.jpg" data-full="Light/Tai%20Tai/DSC01405.jpg" alt="Tai Tai, DSC01405"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01450.jpg" data-full="Light/Tai%20Tai/DSC01450.jpg" alt="Tai Tai — DSC01450"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01450.jpg" data-full="Light/Tai%20Tai/DSC01450.jpg" alt="Tai Tai, DSC01450"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01856.jpg" data-full="Light/Tai%20Tai/DSC01856.jpg" alt="Tai Tai — DSC01856"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01856.jpg" data-full="Light/Tai%20Tai/DSC01856.jpg" alt="Tai Tai, DSC01856"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01802.jpg" data-full="Light/Tai%20Tai/DSC01802.jpg" alt="Tai Tai — DSC01802"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01802.jpg" data-full="Light/Tai%20Tai/DSC01802.jpg" alt="Tai Tai, DSC01802"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
       <div class="port-item">
-        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01924.jpg" data-full="Light/Tai%20Tai/DSC01924.jpg" alt="Tai Tai — DSC01924"></div>
+        <div class="port-ph" style="padding:0;overflow:hidden;"><img loading="lazy" decoding="async" src="Light/Tai%20Tai/DSC01924.jpg" data-full="Light/Tai%20Tai/DSC01924.jpg" alt="Tai Tai, DSC01924"></div>
         <div class="port-overlay"><div class="port-title"></div><div class="port-sub"></div></div>
       </div>
     </div>
@@ -3143,7 +3196,7 @@
 <section class="enquire" id="enquire">
   <div class="enquire-head">
     <h2>Send <em>A Quick Brief</em></h2>
-    <p>Tell us about your shoot in a few lines. We'll reply within two working days.</p>
+    <p>Tell us about your shoot in a few lines. We read every message and reply within two working days.</p>
   </div>
 
   <form class="contact-form" id="contact-form" novalidate>
@@ -3446,6 +3499,23 @@ revealItems.forEach((el, i) => {
   el.style.transition = `opacity 0.6s ease ${(i % 6) * 0.08}s, transform 0.6s ease ${(i % 6) * 0.08}s`;
   observer.observe(el);
 });
+
+// Ken Burns entrance — replays the slow zoom/pan each time a gallery image
+// scrolls into view (mirrors the other portfolio entrance effects). Skipped
+// under reduced motion; the CSS reduced-motion block is the final backstop.
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var kbItems = document.querySelectorAll('.portfolio-grid .port-item:not(.is-video)');
+  if (!kbItems.length) return;
+  var kbObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) en.target.classList.add('kb-in');
+      else en.target.classList.remove('kb-in');
+    });
+  }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+  kbItems.forEach(function (el) { kbObs.observe(el); });
+})();
 
 // Document-level delegation fallback for client tabs and sub-tabs.
 // Ensures taps register even when per-element listeners are suppressed by the browser.
@@ -4169,11 +4239,11 @@ function showWorkPanel(name, clickedTab) {
   }
   function buildBody(data){
     return 'Hi Ember & Frames,\n\n' + (data.message || '(no message provided)') +
-           '\n\n— ——————————————\nName:   ' + data.name +
+           '\n\nName:   ' + data.name +
            '\nEmail:  ' + data.email +
-           '\nPhone:  ' + (data.phone || '—') +
-           '\nBrand:  ' + (data.brand || '—') +
-           '\nType:   ' + (data.type  || '—');
+           '\nPhone:  ' + (data.phone || '-') +
+           '\nBrand:  ' + (data.brand || '-') +
+           '\nType:   ' + (data.type  || '-');
   }
   function resetForm(){
     try { form.reset(); form.querySelectorAll('#cf-type-pills .pill[aria-pressed="true"]').forEach(function(p){ p.setAttribute('aria-pressed','false'); }); var hidden = form.querySelector('#cf-type'); if (hidden) hidden.value = ''; } catch(e){}
@@ -4186,7 +4256,7 @@ function showWorkPanel(name, clickedTab) {
     var url = 'mailto:' + EMAIL_TO +
               '?subject=' + encodeURIComponent(subject) +
               '&body='    + encodeURIComponent(buildBody(data));
-    status.textContent = 'Opening your email — please send the pre-filled message to complete your enquiry. We’ll reply within two working days.';
+    status.textContent = 'Opening your email. Please send the pre-filled message to complete your enquiry. We’ll reply within two working days.';
     status.className = 'form-status success';
     window.location.href = url;
     resetForm();
@@ -4195,9 +4265,9 @@ function showWorkPanel(name, clickedTab) {
     waBtn.addEventListener('click', function(){
       var data = collect();
       if (!validate(data)) return;
-      var intro = 'Hi Ember & Frames — enquiry from your portfolio.\n\n';
+      var intro = 'Hi Ember & Frames, an enquiry from your portfolio.\n\n';
       var url = 'https://wa.me/' + WA_TO + '?text=' + encodeURIComponent(intro + buildBody(data));
-      status.textContent = 'Opening WhatsApp — please send the pre-filled message to complete your enquiry. We’ll reply within two working days.';
+      status.textContent = 'Opening WhatsApp. Please send the pre-filled message to complete your enquiry. We’ll reply within two working days.';
       status.className = 'form-status success';
       window.open(url, '_blank', 'noopener,noreferrer');
       resetForm();

@@ -1,6 +1,6 @@
 # Ember & Frames — F&B Photography Portfolio
 
-A static, single-page portfolio for **Ember & Frames**, a food & beverage photography and content studio. No build step, no dependencies — just vanilla HTML, CSS, and JavaScript served as static files.
+A static, single-page portfolio for **Ember & Frames**, a food & beverage content studio. No build step, no dependencies — just vanilla HTML, CSS, and JavaScript served as static files.
 
 - **Featured brands:** Conçu, Conçu Hamper, Lunar Café, Rü & Kinru, Tai Tai
 - **Stack:** plain HTML, CSS, and JavaScript
@@ -52,6 +52,7 @@ Direct contact details are also listed on the page for visitors with JavaScript 
 ## Editing conventions
 
 - `index.html` is self-contained — its CSS and JavaScript are inlined intentionally so the page deploys as a single artifact.
+- The header shows a faint trail of ember sparks drifting up behind the nav — pure inline CSS (`.nav-sparks .spark`), switched off under `prefers-reduced-motion`.
 - Image and video paths are relative and **case-sensitive** on GitHub Pages. Preserve the `Light/`, `Logos/`, and `Videos/` folder names and casing exactly.
 - Curated images live in `Light/<Brand>/`; reference new assets from there.
 - Videos are referenced from `Videos/Ru and Kinru/web/`, each paired with a poster frame in `Videos/Ru and Kinru/web/posters/`.
