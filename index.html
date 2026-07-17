@@ -635,6 +635,13 @@
   /* Legacy JS-injected text spans + lightbox text mark are no longer shown. */
   .img-wm, .img-wm--sm, .lightbox-wm { display: none !important; }
 
+  /* Every image already carries a burned-in bottom-right brand mark, so the
+     CSS ::before overlay is disabled to prevent a doubled watermark. */
+  .port-item::before,
+  .film-strip-item::before,
+  .hero-img-main::before,
+  .hero-img-sub::before { content: none !important; }
+
   /* Lightbox image wrapper — watermark is positioned relative to this */
   .lightbox-img-wrap {
     position: relative;
@@ -896,7 +903,11 @@
     nav { position: fixed !important; top: 0 !important; left: 0; right: 0; z-index: 100; padding: 16px 24px; -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(250, 245, 238, 0.98); }
     body { padding-top: 64px; }
     .nav-hamburger { display: flex; }
-    .nav-links {
+    /* `nav` prefix raises specificity above the later
+       `.nav-logo, .nav-links, .nav-hamburger { position: relative }` layering
+       rule so the mobile menu becomes a full-width dropdown instead of an
+       in-flow column wedged between the logo and hamburger. */
+    nav .nav-links {
       display: none;
       position: absolute; top: 100%; left: 0; right: 0;
       background: rgba(250, 245, 238, 0.97);
